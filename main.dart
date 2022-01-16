@@ -7,6 +7,9 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
+import './utility/utility.dart';
+import './model/post.dart';
+import './db/databasehelper.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -184,124 +187,4 @@ class _RopesComponent extends State<RopesComponent> {
           ),
         ),
       );
-}
-
-class DatabaseHelper {
-  DatabaseHelper._privateConstructor();
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-  static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
-  Future<Database> _initDatabase() async {
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, 'posts.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
-    );
-  }
-
-  Future _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE posts(
-        id INTEGER PRIMARY KEY,
-        title TEXT,
-        content TEXT,
-        created_at TEXT,
-        updated_at TEXT
-      )
-    ''');
-  }
-
-  Future<List<Post>> getPosts() async {
-    Database db = await instance.database;
-    var posts = await db.query('posts', orderBy: 'title');
-    List<Post> postList =
-        posts.isNotEmpty ? posts.map((c) => Post.fromMap(c)).toList() : [];
-    return postList;
-  }
-
-  Future<int> add(Post post) async {
-    Database db = await instance.database;
-    return await db.insert('posts', post.toMap());
-  }
-
-  Future<int> update(Post post) async {
-    Database db = await instance.database;
-    return await db
-        .update("posts", post.toMap(), where: "id=?", whereArgs: [post.id]);
-  }
-}
-
-class Post {
-  final int? id;
-  final String title;
-  final String content;
-  final String created_at;
-  final String updated_at;
-
-  Post(
-      {this.id,
-      required this.title,
-      required this.content,
-      required this.created_at,
-      required this.updated_at});
-
-  factory Post.fromMap(Map<String, dynamic> json) => new Post(
-        id: json['id'],
-        title: json['title'],
-        content: json['content'],
-        created_at: json['created_at'],
-        updated_at: json['updated_at'],
-      );
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'content': content,
-      'created_at': created_at,
-      'updated_at': updated_at
-    };
-  }
-}
-
-class Utility {
-  String getDateTime() {
-    DateTime now = DateTime.now();
-    DateFormat outputFormat = DateFormat('yyyy-MM-dd H:m:s');
-    String date = outputFormat.format(now);
-    return date;
-  }
-
-  String isEventKeyPressd(event) {
-    String eventName = "";
-    if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyS) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyS)) {
-      eventName = "save";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyN) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyN)) {
-      eventName = "add";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyT) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyT)) {
-      eventName = "date";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyC) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyC)) {
-      eventName = "copy";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyF) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyF)) {
-      eventName = "search";
-    }
-    return eventName;
-  }
 }
