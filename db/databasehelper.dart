@@ -33,6 +33,7 @@ class DatabaseHelper {
 
   Future<List<Post>> getPosts() async {
     Database db = await instance.database;
+    print("fugafuga");
     var posts = await db.query('posts', orderBy: 'title');
     List<Post> postList =
         posts.isNotEmpty ? posts.map((c) => Post.fromMap(c)).toList() : [];

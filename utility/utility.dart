@@ -38,6 +38,11 @@ class Utility {
         event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
             event.isKeyPressed(LogicalKeyboardKey.keyF)) {
       eventName = "search";
+    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
+            event.isKeyPressed(LogicalKeyboardKey.keyZ) ||
+        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
+            event.isKeyPressed(LogicalKeyboardKey.keyZ)) {
+      eventName = "undo";
     }
     return eventName;
   }
