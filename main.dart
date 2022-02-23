@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -7,9 +8,12 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:undo/undo.dart';
 import './utility/utility.dart';
 import './model/post.dart';
 import './db/databasehelper.dart';
+// import 'package:flutter_quill/flutter_quill.dart';
+// import 'package:simple_rich_text/simple_rich_text.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +45,19 @@ class _RopesComponent extends State<RopesComponent> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   Utility utility = new Utility();
+  late SimpleStack _controller;
+
+  @override
+  void initState() {
+    _controller = SimpleStack(
+      {'id': 0, 'value': ''},
+      limit: 10,
+      onUpdate: (val) {
+        if (mounted) setState(() {});
+      },
+    );
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -91,6 +108,9 @@ class _RopesComponent extends State<RopesComponent> {
                 selectedId = null;
                 selectedPostCreatedAt = null;
               });
+            }
+            if (eventName == "undo") {
+              print("undo");
             }
             if (eventName == "copy") {
               //   if (selectedId != null) {
@@ -175,6 +195,64 @@ class _RopesComponent extends State<RopesComponent> {
                             decoration: InputDecoration(
                               border: InputBorder.none,
                             ),
+                            onSubmitted: (text) {
+                              print(text);
+                              var undo_list = {selectedId: text};
+                              var _undo_state = {
+                                'id': selectedId,
+                                'value': text,
+                              };
+                              _controller.modify(_undo_state);
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          left: 10.0,
+                          top: 100,
+                          width: 150.0,
+                          child: ElevatedButton(
+                              child: const Text('undo'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.orange,
+                                onPrimary: Colors.white,
+                              ),
+                              onPressed: () {}),
+                        ),
+                        Positioned(
+                          left: 10.0,
+                          top: 150,
+                          width: 150.0,
+                          child: ElevatedButton(
+                            child: const Text('redo'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.orange,
+                              onPrimary: Colors.white,
+                            ),
+                            onPressed: !_controller.canUndo
+                                ? null
+                                : () {
+                                    if (mounted)
+                                      setState(
+                                        () {
+                                          _controller.undo();
+                                        },
+                                      );
+                                    var data = _controller.state;
+                                    print(_controller);
+                                  },
+                          ),
+                        ),
+                        Positioned(
+                          left: 10.0,
+                          top: 200,
+                          width: 150.0,
+                          child: ElevatedButton(
+                            child: const Text('add_button'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.orange,
+                              onPrimary: Colors.white,
+                            ),
+                            onPressed: () {},
                           ),
                         ),
                       ],
