@@ -23,26 +23,6 @@ class Utility {
         event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
             event.isKeyPressed(LogicalKeyboardKey.keyN)) {
       eventName = "add";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyT) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyT)) {
-      eventName = "date";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyC) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyC)) {
-      eventName = "copy";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyF) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyF)) {
-      eventName = "search";
-    } else if (event.isKeyPressed(LogicalKeyboardKey.metaLeft) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyZ) ||
-        event.isKeyPressed(LogicalKeyboardKey.metaRight) &&
-            event.isKeyPressed(LogicalKeyboardKey.keyZ)) {
-      eventName = "undo";
     }
     return eventName;
   }

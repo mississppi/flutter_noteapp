@@ -109,26 +109,6 @@ class _RopesComponent extends State<RopesComponent> {
                 selectedPostCreatedAt = null;
               });
             }
-            if (eventName == "undo") {
-              print("undo");
-            }
-            if (eventName == "copy") {
-              //   if (selectedId != null) {
-              //まずテキスト選択状態かどうかの判定
-              //     //カーソルが存在したら的なバリでいるかもな
-              //     //.selection = 場所
-              //     //
-              //     //contentController.text.length 文字数
-
-              //     //まずカーソルのクラスあるのか
-              //     //まずflutter自体でショートカット用意してないのか調査
-
-              //     contentController.selection = TextSelection.fromPosition(
-              //         TextPosition(offset: contentController.text.length));
-              //     print("selected");
-              //     print(contentController.text.length);
-              //   }
-            }
           }
         },
         child: Scaffold(
@@ -204,55 +184,6 @@ class _RopesComponent extends State<RopesComponent> {
                               };
                               _controller.modify(_undo_state);
                             },
-                          ),
-                        ),
-                        Positioned(
-                          left: 10.0,
-                          top: 100,
-                          width: 150.0,
-                          child: ElevatedButton(
-                              child: const Text('undo'),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.orange,
-                                onPrimary: Colors.white,
-                              ),
-                              onPressed: () {}),
-                        ),
-                        Positioned(
-                          left: 10.0,
-                          top: 150,
-                          width: 150.0,
-                          child: ElevatedButton(
-                            child: const Text('redo'),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.orange,
-                              onPrimary: Colors.white,
-                            ),
-                            onPressed: !_controller.canUndo
-                                ? null
-                                : () {
-                                    if (mounted)
-                                      setState(
-                                        () {
-                                          _controller.undo();
-                                        },
-                                      );
-                                    var data = _controller.state;
-                                    print(_controller);
-                                  },
-                          ),
-                        ),
-                        Positioned(
-                          left: 10.0,
-                          top: 200,
-                          width: 150.0,
-                          child: ElevatedButton(
-                            child: const Text('add_button'),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.orange,
-                              onPrimary: Colors.white,
-                            ),
-                            onPressed: () {},
                           ),
                         ),
                       ],
