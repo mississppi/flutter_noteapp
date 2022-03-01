@@ -8,12 +8,9 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:undo/undo.dart';
 import './utility/utility.dart';
 import './model/post.dart';
 import './db/databasehelper.dart';
-// import 'package:flutter_quill/flutter_quill.dart';
-// import 'package:simple_rich_text/simple_rich_text.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,17 +42,9 @@ class _RopesComponent extends State<RopesComponent> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   Utility utility = new Utility();
-  late SimpleStack _controller;
 
   @override
   void initState() {
-    _controller = SimpleStack(
-      {'id': 0, 'value': ''},
-      limit: 10,
-      onUpdate: (val) {
-        if (mounted) setState(() {});
-      },
-    );
     super.initState();
   }
 
@@ -74,41 +63,41 @@ class _RopesComponent extends State<RopesComponent> {
           final key = event.logicalKey;
           if (event is RawKeyDownEvent) {
             String eventName = utility.isEventKeyPressd(event);
-            if (eventName == "save") {
-              if (selectedId != null) {
-                DatabaseHelper.instance.update(
-                  Post(
-                    id: selectedId,
-                    title: titleController.text,
-                    content: contentController.text,
-                    created_at: selectedPostCreatedAt.toString(),
-                    updated_at: utility.getDateTime(),
-                  ),
-                );
-                setState(() {
-                  titleController.text = titleController.text;
-                  contentController.text = contentController.text;
-                  selectedId = selectedId;
-                  selectedPostCreatedAt = null;
-                });
-              }
-            }
-            if (eventName == "add") {
-              DatabaseHelper.instance.add(
-                Post(
-                  title: "no title",
-                  content: "",
-                  created_at: utility.getDateTime(),
-                  updated_at: utility.getDateTime(),
-                ),
-              );
-              setState(() {
-                titleController.clear();
-                contentController.clear();
-                selectedId = null;
-                selectedPostCreatedAt = null;
-              });
-            }
+            // if (eventName == "save") {
+            //   if (selectedId != null) {
+            //     DatabaseHelper.instance.update(
+            //       Post(
+            //         id: selectedId,
+            //         title: titleController.text,
+            //         content: contentController.text,
+            //         created_at: selectedPostCreatedAt.toString(),
+            //         updated_at: utility.getDateTime(),
+            //       ),
+            //     );
+            //     setState(() {
+            //       titleController.text = titleController.text;
+            //       contentController.text = contentController.text;
+            //       selectedId = selectedId;
+            //       selectedPostCreatedAt = null;
+            //     });
+            //   }
+            // }
+            // if (eventName == "add") {
+            //   DatabaseHelper.instance.add(
+            //     Post(
+            //       title: "no title",
+            //       content: "",
+            //       created_at: utility.getDateTime(),
+            //       updated_at: utility.getDateTime(),
+            //     ),
+            //   );
+            //   setState(() {
+            //     titleController.clear();
+            //     contentController.clear();
+            //     selectedId = null;
+            //     selectedPostCreatedAt = null;
+            //   });
+            // }
           }
         },
         child: Scaffold(
@@ -182,7 +171,6 @@ class _RopesComponent extends State<RopesComponent> {
                                 'id': selectedId,
                                 'value': text,
                               };
-                              _controller.modify(_undo_state);
                             },
                           ),
                         ),
