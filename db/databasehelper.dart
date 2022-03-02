@@ -11,7 +11,6 @@ class DatabaseHelper {
   Future<Database> get database async => _database ??= await _initDatabase();
   Future<Database> _initDatabase() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
-    print("hoeghoghoehoghohe");
     String path = join(documentDirectory.path, 'posts.db');
     return await openDatabase(
       path,
@@ -27,7 +26,9 @@ class DatabaseHelper {
         title TEXT,
         content TEXT,
         created_at TEXT,
-        updated_at TEXT
+        updated_at TEXT,
+        status TEXT,
+        post_order INTEGER
       )
     ''');
   }

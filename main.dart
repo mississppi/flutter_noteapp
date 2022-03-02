@@ -63,41 +63,45 @@ class _RopesComponent extends State<RopesComponent> {
           final key = event.logicalKey;
           if (event is RawKeyDownEvent) {
             String eventName = utility.isEventKeyPressd(event);
-            // if (eventName == "save") {
-            //   if (selectedId != null) {
-            //     DatabaseHelper.instance.update(
-            //       Post(
-            //         id: selectedId,
-            //         title: titleController.text,
-            //         content: contentController.text,
-            //         created_at: selectedPostCreatedAt.toString(),
-            //         updated_at: utility.getDateTime(),
-            //       ),
-            //     );
-            //     setState(() {
-            //       titleController.text = titleController.text;
-            //       contentController.text = contentController.text;
-            //       selectedId = selectedId;
-            //       selectedPostCreatedAt = null;
-            //     });
-            //   }
-            // }
-            // if (eventName == "add") {
-            //   DatabaseHelper.instance.add(
-            //     Post(
-            //       title: "no title",
-            //       content: "",
-            //       created_at: utility.getDateTime(),
-            //       updated_at: utility.getDateTime(),
-            //     ),
-            //   );
-            //   setState(() {
-            //     titleController.clear();
-            //     contentController.clear();
-            //     selectedId = null;
-            //     selectedPostCreatedAt = null;
-            //   });
-            // }
+            if (eventName == "save") {
+              if (selectedId != null) {
+                DatabaseHelper.instance.update(
+                  Post(
+                    id: selectedId,
+                    title: titleController.text,
+                    content: contentController.text,
+                    created_at: selectedPostCreatedAt.toString(),
+                    updated_at: utility.getDateTime(),
+                    status: 'publish',
+                    post_order: 1,
+                  ),
+                );
+                setState(() {
+                  titleController.text = titleController.text;
+                  contentController.text = contentController.text;
+                  selectedId = selectedId;
+                  selectedPostCreatedAt = null;
+                });
+              }
+            }
+            if (eventName == "add") {
+              DatabaseHelper.instance.add(
+                Post(
+                  title: "no title",
+                  content: "",
+                  created_at: utility.getDateTime(),
+                  updated_at: utility.getDateTime(),
+                  status: 'publish',
+                  post_order: 1,
+                ),
+              );
+              setState(() {
+                titleController.clear();
+                contentController.clear();
+                selectedId = null;
+                selectedPostCreatedAt = null;
+              });
+            }
           }
         },
         child: Scaffold(
@@ -164,14 +168,6 @@ class _RopesComponent extends State<RopesComponent> {
                             decoration: InputDecoration(
                               border: InputBorder.none,
                             ),
-                            onSubmitted: (text) {
-                              print(text);
-                              var undo_list = {selectedId: text};
-                              var _undo_state = {
-                                'id': selectedId,
-                                'value': text,
-                              };
-                            },
                           ),
                         ),
                       ],
